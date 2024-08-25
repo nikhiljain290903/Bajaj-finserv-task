@@ -40,38 +40,6 @@
     <h2>Response:</h2>
     <pre id="response"></pre>
 
-    <script>
-        function sendRequest() {
-            const jsonInput = document.getElementById('jsonInput').value;
-            const selectedOptions = Array.from(document.getElementById('options').selectedOptions)
-                                        .map(option => option.value);
-
-           
-
-            fetch('http://localhost:3000/bfhl-api', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(requestData)
-            })
-            .then(response => response.json())
-            .then(data => {
-              
-                let displayData = {};
-                selectedOptions.forEach(option => {
-                    if (data[option] !== undefined) {
-                        displayData[option] = data[option];
-                    }
-                });
-
-                document.getElementById('response').textContent = JSON.stringify(displayData, null, 2);
-            })
-            .catch(error => {
-                document.getElementById('response').textContent = 'Error: ' + error;
-            });
-        }
-    </script>
     <script src="server.js">
 </body>
 </html>
