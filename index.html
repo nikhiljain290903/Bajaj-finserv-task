@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ABCD123</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        textarea, select {
+            width: 100%;
+            box-sizing: border-box;
+        }
+        button {
+            margin-top: 10px;
+        }
+        pre {
+            background-color: #f4f4f4;
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <h1>BFHL API Interaction</h1>
+    <label for="jsonInput">Enter JSON Data:</label><br>
+    <textarea id="jsonInput" rows="5" placeholder='{"data": ["A","C","Z","c","i"]}'></textarea><br><br>
+
+    <label for="options">Select Data to Display:</label><br>
+    <select id="options" multiple>
+        <option value="alphabets">Alphabets</option>
+        <option value="numbers">Numbers</option>
+        <option value="highest_lowercase_alphabet">Highest Lowercase Alphabet</option>
+    </select><br><br>
+
+    <button onclick="sendRequest()">Submit</button>
+
+    <h2>Response:</h2>
+    <pre id="response"></pre>
+
+    <script>
+        function sendRequest() {
+            const jsonInput = document.getElementById('jsonInput').value;
+            const selectedOptions = Array.from(document.getElementById('options').selectedOptions)
+                                        .map(option => option.value);
+
+            let requestData;
+            try {
+                requestData = JSON.parse(jsonInput);
+            } catch (e) {
+                alert('Invalid JSON format!');
+                return;
+            }
+
+            fetch('http://localhost:3000/bfhl-api', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestData)
+            })
+            .then(response => response.json())
+            .then(data => {
+              
+                let displayData = {};
+                selectedOptions.forEach(option => {
+                    if (data[option] !== undefined) {
+                        displayData[option] = data[option];
+                    }
+                });
+
+                document.getElementById('response').textContent = JSON.stringify(displayData, null, 2);
+            })
+            .catch(error => {
+                document.getElementById('response').textContent = 'Error: ' + error;
+            });
+        }
+    </script>
+</body>
+</html>
