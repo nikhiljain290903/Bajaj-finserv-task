@@ -46,13 +46,7 @@
             const selectedOptions = Array.from(document.getElementById('options').selectedOptions)
                                         .map(option => option.value);
 
-            let requestData;
-            try {
-                requestData = JSON.parse(jsonInput);
-            } catch (e) {
-                alert('Invalid JSON format!');
-                return;
-            }
+           
 
             fetch('http://localhost:3000/bfhl-api', {
                 method: 'POST',
@@ -78,5 +72,6 @@
             });
         }
     </script>
+    <script src="server.js">
 </body>
 </html>
